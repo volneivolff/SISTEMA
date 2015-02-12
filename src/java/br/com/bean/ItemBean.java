@@ -118,12 +118,8 @@ public class ItemBean implements Serializable {
         usrDao.addUsuario(usr);
 
         usr.setAdministrador(false);
-        usr.setCadastrante("");
-        usr.setEmail("");
-        usr.setNome("");
-        usr.setSenha("");
-        usr.setTelefone("");
-        usr.setUsuario("");
+        
+        usr = new Usuario();
 
         getUserGrid();
     }

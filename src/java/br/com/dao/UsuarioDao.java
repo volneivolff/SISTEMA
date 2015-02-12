@@ -46,9 +46,11 @@ public class UsuarioDao implements Serializable {
             transacao.commit();
 
             growl.addMessage("Sucesso!", "Usuario adicionado com sucesso!");
+        
         } catch (HibernateException e) {
 
             growl.addMessage("Erro!", "Erro ao adicionar Usuário:" + e);
+       
         } finally {
 
             sessao.close();

@@ -47,6 +47,105 @@ public class Usuario implements Serializable {
     @Column(name = "USUARIO_ADMINISTRADOR")
     private boolean administrador;
 
+    @Column(name = "USUARIO_LASTSESSION")
+    private String lastSession;
+
+    @Column(name = "USUARIO_ADDCLIENTE")
+    private boolean AddCliente;
+
+    @Column(name = "USUARIO_ADDESTOQUE")
+    private boolean AddEstoque;
+
+    @Column(name = "USUARIO_ALTESTOQUE")
+    private boolean AltEstoque;
+
+    @Column(name = "USUARIO_DELESTOQUE")
+    private boolean DelEstoque;
+
+    @Column(name = "USUARIO_ADDUSUARIO")
+    private boolean AddUsuario;
+
+    @Column(name = "USUARIO_ALTUSUARIO")
+    private boolean AltUsuario;
+
+    @Column(name = "USUARIO_DELUSUARIO")
+    private boolean DelUsuario;
+
+    @Column(name = "USUARIO_ADMSISTEMA")
+    private boolean AdmSistema;
+
+    public String getLastSession() {
+        return lastSession;
+    }
+
+    public void setLastSession(String lastSession) {
+        this.lastSession = lastSession;
+    }
+
+    public boolean isAddCliente() {
+        return AddCliente;
+    }
+
+    public void setAddCliente(boolean AddCliente) {
+        this.AddCliente = AddCliente;
+    }
+
+    public boolean isAddEstoque() {
+        return AddEstoque;
+    }
+
+    public void setAddEstoque(boolean AddEstoque) {
+        this.AddEstoque = AddEstoque;
+    }
+
+    public boolean isAltEstoque() {
+        return AltEstoque;
+    }
+
+    public void setAltEstoque(boolean AltEstoque) {
+        this.AltEstoque = AltEstoque;
+    }
+
+    public boolean isDelEstoque() {
+        return DelEstoque;
+    }
+
+    public void setDelEstoque(boolean DelEstoque) {
+        this.DelEstoque = DelEstoque;
+    }
+
+    public boolean isAddUsuario() {
+        return AddUsuario;
+    }
+
+    public void setAddUsuario(boolean AddUsuario) {
+        this.AddUsuario = AddUsuario;
+    }
+
+    public boolean isAltUsuario() {
+        return AltUsuario;
+    }
+
+    public void setAltUsuario(boolean AltUsuario) {
+        this.AltUsuario = AltUsuario;
+    }
+
+    public boolean isDelUsuario() {
+        return DelUsuario;
+    }
+
+    public void setDelUsuario(boolean DelUsuario) {
+        this.DelUsuario = DelUsuario;
+    }
+
+    public boolean isAdmSistema() {
+        return AdmSistema;
+    }
+
+    public void setAdmSistema(boolean AdmSistema) {
+        this.AdmSistema = AdmSistema;
+    }
+
     public String getNome() {
         return nome;
     }
