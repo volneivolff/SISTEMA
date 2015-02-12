@@ -4,7 +4,11 @@ import br.com.code.Growl;
 import br.com.dao.UsuarioDao;
 import br.com.entity.Usuario;
 import java.util.List;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
+@ManagedBean
+@SessionScoped
 public class mbLogin {
 
     private Usuario usr;
