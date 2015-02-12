@@ -19,6 +19,7 @@ public class mbLogin {
 
     //CABEÇALHO DE PERMISSOES
     private Usuario usPerm;
+    private boolean usLogado;
     
     public String logaUsuario() {
 
@@ -44,7 +45,9 @@ public class mbLogin {
             retorno = "welcome.xhtml?faces-redirect=true";
 
             System.out.println("Ação do Usuário: LOGOU NO SISTEMA");
-
+            
+            setUsLogado(true); 
+            
         } else {
 
             growl.addMessage("Erro!", "Não foram encontradas suas credenciais, tente novamente!");
@@ -54,7 +57,9 @@ public class mbLogin {
             retorno = "index.xhtml?faces-redirect=true";
 
             System.out.println("Ação do Usuário: FALHA DO LOGON");
-
+            
+            setUsLogado(false);
+            
         }
 
         return retorno;
@@ -66,6 +71,14 @@ public class mbLogin {
 
     //GETS AND SETS
 
+    public boolean isUsLogado() {
+        return usLogado;
+    }
+
+    public void setUsLogado(boolean usLogado) {
+        this.usLogado = usLogado;
+    }
+    
     public boolean isMsgErro() {
         return msgErro;
     }
@@ -74,20 +87,21 @@ public class mbLogin {
         this.msgErro = msgErro;
     }
 
-    public Usuario getUsuarioDeUsoRecorrente() {
+    public Usuario getUsRec() {
         return usRec;
     }
 
-    public void setUsuarioDeUsoRecorrente(Usuario usuarioDeUsoRecorrente) {
-        this.usRec = usuarioDeUsoRecorrente;
+    public void setUsRec(Usuario usRec) {
+        this.usRec = usRec;
     }
 
-    public Usuario getUsuarioPermantenteNaSessao() {
+    public Usuario getUsPerm() {
         return usPerm;
     }
 
-    public void setUsuarioPermantenteNaSessao(Usuario usuarioPermantenteNaSessao) {
-        this.usPerm = usuarioPermantenteNaSessao;
+    public void setUsPerm(Usuario usPerm) {
+        this.usPerm = usPerm;
     }
+
 
 }
