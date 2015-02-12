@@ -35,7 +35,28 @@
                                 <h:outputText value="Administrador:" />
                                 <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
 
-                                <h:outputText value="Senha:" />
+                                <h:outputText value="Adiciona Clientes:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
+
+                                <h:outputText value="Adiciona Itens ao Estoque:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
+
+                                <h:outputText value="Altera Quatidades no Estoque:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
+
+                                <h:outputText value="Deleta Itens do Estoque:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
+
+                                <h:outputText value="Adiciona Usuários:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
+
+                                <h:outputText value="Altera Usuários:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
+
+                                <h:outputText value="Deleta Usuários:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
+
+                                <h:outputText value="Administra o Sistema" />
                                 <p:password value="#{itemBean.usr.senha}" required="false" feedback="true"/> 
 
                                 <p:commandButton value="Cadastrar" action="#{itemBean.addUsuario()}" update="@form">
