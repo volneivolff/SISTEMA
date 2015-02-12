@@ -57,7 +57,7 @@
                     <p:column>
                         <!--onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" ajax="false"-->
                         <p:commandButton value="Entrar" action="#{itemBean.logaUsuario()}" update="@form" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" ajax="false"/>
-                        <p:outputLabel value=" Tente novamente!" styleClass="erroLogin" rendered="#{itemBean.msgErro}" styleClass="radius" ></p:outputLabel>  
+                        <p:outputLabel value=" TENTE NOVAMENTE!" style="color:#ff0000; font-size:17px; font-weight:bold;" rendered="#{itemBean.msgErro}" styleClass="radius" ></p:outputLabel>  
                     </p:column>
                 </p:row>
             </p:panelGrid>  
