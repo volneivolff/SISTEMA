@@ -1,5 +1,12 @@
+.erroLogin {
+
+    color: #ff0000;
+    font-size: 14px;
+    font-weight:bold;
+}
+
 .welcomeLink:active {
-    
+
     color: #ff0000;
     font-size: 24px;
     font-weight:bold;
@@ -7,7 +14,7 @@
 }
 
 .welcomeLink:link {
-    
+
     color: #000000;
     font-size: 20px;
     font-weight:bold;
@@ -15,7 +22,7 @@
 }
 
 .welcomeLink:hover {
-    
+
     color: #ff0000;
     font-size: 24px;
     font-weight:bold;
@@ -23,12 +30,12 @@
 }
 
 .welcomeTxt{
-    
+
     font-size: 22px;
 }
 
 .divwelcome{   
-    
+
     margin-left: 100px;
 }
 
