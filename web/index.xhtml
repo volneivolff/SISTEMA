@@ -37,30 +37,40 @@
         <h:form id="myform">
 
             <p:growl id="growl2" showDetail="true" transient="true" sticky="false" life="3000"/>
+            
             <p:panelGrid columns="2" styleClass="login radius" style="width:300px; height:180px">
                 <f:facet name="header">
                     Login
                 </f:facet>
 
                 <h:outputText value="Usuário : " />
-                <p:inputText value="#{itemBean.usr.usuario}" onkeyup="this.value = this.value.toUpperCase()">
-                    <p:ajax event="blur" listener="#{itemBean.errToFalse()}" update="myform"/>
+                <p:inputText value="#{mbLogin.usuarioDeUsoRecorrente.usuario}" 
+                             onkeyup="this.value = this.value.toUpperCase()">
+                    
+                    <p:ajax event="blur" 
+                            listener="#{mbLogin.errToFalse()}" 
+                            update="myform"/>
                 </p:inputText>
+                
                 <h:outputText value="Senha : " />
-                <p:password value="#{itemBean.usr.senha}">
-                    <p:ajax event="blur" listener="#{itemBean.errToFalse()}" update="myform"/>
+                <p:password value="#{mbLogin.usuarioDeUsoRecorrente.senha}">
+                    
+                    <p:ajax event="blur" 
+                            listener="#{itemBean.errToFalse()}" 
+                            update="myform"/>
                 </p:password>
 
             </p:panelGrid>
+            
             <p:panelGrid id="mypanel" styleClass="login radius" style="width:300px;">
                 <p:row>
                     <p:column>
                         <!--onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" ajax="false"-->
-                        <p:commandButton value="Entrar" action="#{itemBean.logaUsuario()}" update="@form" ajax="false"/>
+                        <p:commandButton value="Entrar" action="#{mbLogin.logaUsuario()}" update="@form" ajax="false"/>
                        
                         <p:outputLabel value=" TENTE NOVAMENTE!" 
                                        style="color:#ff0000; font-size:17px; font-weight:bold;" 
-                                       rendered="#{itemBean.msgErro}" 
+                                       rendered="#{mbLogin.msgErro}" 
                                        styleClass="radius" >
                         </p:outputLabel>  
                     
