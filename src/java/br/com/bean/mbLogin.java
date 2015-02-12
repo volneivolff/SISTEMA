@@ -7,7 +7,6 @@ import java.util.List;
 
 public class mbLogin {
 
-    
     private Usuario usr;
     private Growl growl;
     private UsuarioDao usrDao;
@@ -15,9 +14,9 @@ public class mbLogin {
     boolean msgErro;
 
     //CABEÇALHO DE PERMISSOES
-    String usuarioCorrente;
-    boolean privilegiosUsuario;
-    
+    private String usuarioCorrente;
+    private boolean privilegiosUsuario;
+
     public String logaUsuario() {
 
         String retorno;
@@ -32,7 +31,7 @@ public class mbLogin {
         if (listaus == 1) {
 
             usuarioCorrente = usr.getUsuario();
-            privilegiosUsuario = listaDeUsuarios.get(0).isAdministrador();
+            //privilegiosUsuario = listaDeUsuarios.get(0).isAdministrador();
             usr.setUsuario("");
             growl.addMessage("Sucesso!", "Bem Vindo " + usuarioCorrente);
             setMsgErro(false);
@@ -44,12 +43,14 @@ public class mbLogin {
             growl.addMessage("Erro!", "Não foram encontradas suas credenciais, tente novamente!");
             setMsgErro(true);
             retorno = "index.xhtml?faces-redirect=true";
+            System.out.println("Ação do Usuário: FALHA DO LOGON");
+
         }
 
         return retorno;
     }
 
-//   GETS AND SETS
+    //GETS AND SETS
     public boolean isMsgErro() {
         return msgErro;
     }
