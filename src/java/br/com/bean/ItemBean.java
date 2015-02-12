@@ -156,7 +156,7 @@ public class ItemBean implements Serializable {
 
             growl.addMessage("Erro!", "Não foram encontradas suas credenciais, tente novamente!");
             setMsgErro(true);
-            retorno = "index.xhtml";
+            retorno = "index.xhtml?faces-redirect=true";
         }
 
         return retorno;
