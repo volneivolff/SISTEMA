@@ -20,7 +20,7 @@ public class mbLogin {
     //CABEÇALHO DE PERMISSOES
     private Usuario usPerm;
     private boolean usLogado;
-    
+
     public String logaUsuario() {
 
         String retorno;
@@ -45,9 +45,9 @@ public class mbLogin {
             retorno = "welcome.xhtml?faces-redirect=true";
 
             System.out.println("Ação do Usuário: LOGOU NO SISTEMA");
-            
-            setUsLogado(true); 
-            
+
+            setUsLogado(true);
+
         } else {
 
             growl.addMessage("Erro!", "Não foram encontradas suas credenciais, tente novamente!");
@@ -57,9 +57,9 @@ public class mbLogin {
             retorno = "index.xhtml?faces-redirect=true";
 
             System.out.println("Ação do Usuário: FALHA DO LOGON");
-            
+
             setUsLogado(false);
-            
+
         }
 
         return retorno;
@@ -70,7 +70,6 @@ public class mbLogin {
     }
 
     //GETS AND SETS
-
     public boolean isUsLogado() {
         return usLogado;
     }
@@ -78,7 +77,7 @@ public class mbLogin {
     public void setUsLogado(boolean usLogado) {
         this.usLogado = usLogado;
     }
-    
+
     public boolean isMsgErro() {
         return msgErro;
     }
@@ -102,6 +101,5 @@ public class mbLogin {
     public void setUsPerm(Usuario usPerm) {
         this.usPerm = usPerm;
     }
-
 
 }
