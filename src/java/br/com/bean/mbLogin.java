@@ -11,21 +11,21 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class mbLogin {
 
-    private Usuario usuarioDeUsoRecorrente;
+    private Usuario usRec;
     private Growl growl;
     private UsuarioDao usrDao;
     private List<Usuario> listaDeUsuarios;
     boolean msgErro;
 
     //CABEÇALHO DE PERMISSOES
-    private Usuario usuarioPermantenteNaSessao;
-
+    private Usuario usPerm;
+    
     public String logaUsuario() {
 
         String retorno;
 
-        String usuario = usuarioDeUsoRecorrente.getUsuario();
-        String senha = usuarioDeUsoRecorrente.getSenha();
+        String usuario = usRec.getUsuario();
+        String senha = usRec.getSenha();
 
         listaDeUsuarios = usrDao.confereUser(usuario, senha);
 
@@ -33,11 +33,11 @@ public class mbLogin {
 
         if (listaus == 1) {
 
-            usuarioPermantenteNaSessao = listaDeUsuarios.get(0);
+            usPerm = listaDeUsuarios.get(0);
 
-            usuarioDeUsoRecorrente.setUsuario("");
+            usRec.setUsuario("");
 
-            growl.addMessage("Sucesso!", "Bem Vindo " + usuarioPermantenteNaSessao.getNome());
+            growl.addMessage("Sucesso!", "Bem Vindo " + usPerm.getNome());
 
             setMsgErro(false);
 
@@ -75,19 +75,19 @@ public class mbLogin {
     }
 
     public Usuario getUsuarioDeUsoRecorrente() {
-        return usuarioDeUsoRecorrente;
+        return usRec;
     }
 
     public void setUsuarioDeUsoRecorrente(Usuario usuarioDeUsoRecorrente) {
-        this.usuarioDeUsoRecorrente = usuarioDeUsoRecorrente;
+        this.usRec = usuarioDeUsoRecorrente;
     }
 
     public Usuario getUsuarioPermantenteNaSessao() {
-        return usuarioPermantenteNaSessao;
+        return usPerm;
     }
 
     public void setUsuarioPermantenteNaSessao(Usuario usuarioPermantenteNaSessao) {
-        this.usuarioPermantenteNaSessao = usuarioPermantenteNaSessao;
+        this.usPerm = usuarioPermantenteNaSessao;
     }
 
 }
