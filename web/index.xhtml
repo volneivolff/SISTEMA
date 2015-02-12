@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <link href='http://fonts.googleapis.com/css?family=Chicle|Condiment|Oswald' rel='stylesheet' type='text/css' />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/layout.css"/>
+        <h:outputScript name="locale-primefaces.js" library="js" />
+        <h:outputScript name="setarFoco.js" library="js" />
+        <title>REVESTEBEM</title>
+    </h:head>
+
+    <h:body>
+        <div id="topoContent" class="radius" style="background-color: white">
+            <div id="topo" class="topo radius" style="background-color:#CC0202;margin:3px">
+                <div class="titulo" style="color:white">
+                    <ui:insert name="topo">
+                        <div style="float: left">
+                            REVESTEBEM
+                        </div>
+                    </ui:insert>
+                </div>  
+            </div>
+        </div>
+
+        <!--p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" /-->
+
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <p:graphicImage value="/resources/css/imagens/ProgressBar_00.gif" />
+        </p:dialog>
+
+        <h:form id="myform">
+
+            <p:growl id="growl2" showDetail="true" transient="true" sticky="false" life="3000"/>
+            <p:panelGrid columns="2" styleClass="login radius" style="width:300px; height:180px">
+                <f:facet name="header">
+                    Login
+                </f:facet>
+
+                <h:outputText value="Usuário : " />
+                <p:inputText value="#{itemBean.usr.usuario}" onkeyup="this.value = this.value.toUpperCase()">
+                    <p:ajax event="blur" listener="#{itemBean.errToFalse()}" update="myform"/>
+                </p:inputText>
+                <h:outputText value="Senha : " />
+                <p:password value="#{itemBean.usr.senha}">
+                    <p:ajax event="blur" listener="#{itemBean.errToFalse()}" update="myform"/>
+                </p:password>
+
+            </p:panelGrid>
+            <p:panelGrid id="mypanel" styleClass="login radius" style="width:300px;">
+                <p:row>
+                    <p:column>
+                        <!--onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" ajax="false"-->
+                        <p:commandButton value="Entrar" action="#{itemBean.logaUsuario()}" update="@form" onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" ajax="false"/>
+                        <p:outputLabel value="  Erro ! Tente novamente!" style="color: crimson" rendered="#{itemBean.msgErro}" styleClass="radius" ></p:outputLabel>  
+                    </p:column>
+                </p:row>
+            </p:panelGrid>  
+        </h:form>
+    </h:body>
+</html>

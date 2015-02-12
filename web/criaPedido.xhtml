@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="./TMP.xhtml">
+            <ui:define name="corpo">
+                <p:growl id="growl2" showDetail="true" transient="true" sticky="false" life="3000"/>
+
+                <p:panel header="Criar Pedido" >
+                    <h:form>
+                        <h:panelGrid id="pedidosGrid" columns="2" cellpadding="5">
+
+                            <h:outputText value="Cliente:" />
+                            <p:autoComplete value="#{itemBean.cliente.nome}" dropdown="true"  completeMethod="#{itemBean.completeCliete()}" required="true" >
+                            </p:autoComplete>
+
+                            <p:commandButton value="Gerar Pedido" action="#{itemBean.geraChavePedido()}" update="chavePedido" />
+                            <p:outputLabel id="chavePedido" value="#{itemBean.chaveDoPedido}" /> 
+
+                        </h:panelGrid>
+
+                        <p:dataTable 
+                            id="dataTablePedido" 
+                            style="max-width: 100%; min-width: 100%"
+                            var="pedido" 
+                            value="#{itemBean.listaDeItensNoPedido}" 
+                            widgetVar="itemTable" 
+                            emptyMessage="Sem resultados para a busca..." 
+                            paginator="true"
+                            rows="15"
+                            >
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="cahvePedido"               
+                                filterBy="#{pedido.chavePedido}" 
+                                filterStyle="width:90%"
+                                headerText="CHAVE"
+                                filterMatchMode="contains"
+                                style="width:6%">     
+                                <h:outputText value="#{pedido.chavePedido}">
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="marcaDesc"               
+                                filterBy="#{pedido.descricao}" 
+                                filterStyle="width:90%"
+                                headerText="ID"
+                                filterMatchMode="contains"
+                                style="width:6%">     
+                                <h:outputText value="#{pedido.descricao}">
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="marcaPedido"               
+                                filterBy="#{pedido.marca}" 
+                                filterStyle="width:90%"
+                                headerText="ID"
+                                filterMatchMode="contains"
+                                style="width:6%">     
+                                <h:outputText value="#{pedido.marca}">
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="modeloPedido"               
+                                filterBy="#{pedido.modelo}" 
+                                filterStyle="width:90%"
+                                headerText="MODELO"
+                                filterMatchMode="contains"
+                                style="width:6%">     
+                                <h:outputText value="#{pedido.modelo}">
+                                </h:outputText>
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <p:dataTable 
+                            id="dataTable" 
+                            style="max-width: 100%; min-width: 100%"
+                            var="item" 
+                            value="#{itemBean.lista}" 
+                            widgetVar="itemTable" 
+                            emptyMessage="Sem resultados para a busca..." 
+                            filteredValue="#{itemBean.filtroItems}"
+                            paginator="true"
+                            rows="15"
+                            >
+
+                            <p:column styleClass="colAdj"                               
+                                      id="idCol" 
+                                      headerText="ADD"
+                                      style="width:3%"
+                                      >  
+                                <center>
+
+                                    <p:commandLink  value="+" style="font-size: 38px" action="#{itemBean.addItensAoPedido(item)}" update="@form">
+                                    </p:commandLink>
+
+                                </center>
+                            </p:column>
+
+                            <p:column          
+                                styleClass="colAdj"
+                                id="desc"               
+                                filterBy="#{item.descricao}"   
+                                headerText="DESCRIÇÃO"
+                                filterMatchMode="contains"
+                                style="width:10%"
+                                >     
+                                <h:outputText value="#{item.descricao}">
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="marca"               
+                                filterBy="#{item.marca}" 
+                                filterStyle="width:90%"
+                                headerText="MARCA"
+                                filterMatchMode="contains"
+                                style="width:6%">     
+                                <h:outputText value="#{item.marca}">
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="modelo"               
+                                filterBy="#{item.modelo}"   
+                                headerText="MODELO"
+                                filterMatchMode="contains"
+                                style="width:10%">     
+                                <center>
+                                    <p:inputTextarea value="#{item.modelo}" cols="10" rows="4" style="font-weight: bold" readonly="true"/>    
+                                </center>
+
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="origem" 
+                                filterBy="#{item.origem}"
+                                filterStyle="width:90%"
+                                headerText="ORIGEM"
+                                filterMatchMode="contains"
+                                style="width:8%"
+                                >  
+                                <h:outputText value="#{item.origem}">
+                                </h:outputText>  
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="quantidade"                    
+                                headerText="QUANT."
+                                style="width:6%">  
+                                <center>
+                                    <h:outputText value="#{item.quantidade}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>  
+                                </center>
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="custo"    
+                                headerText="CUSTO"
+                                style="width:6%">  
+                                <center>
+                                    <h:outputText value="#{item.custoDoProduto}">
+                                        <f:convertNumber pattern="R$ #,##0.00"/>
+                                    </h:outputText>  
+                                </center>
+                            </p:column>
+
+                            <p:column
+                                styleClass="colAdj"
+                                id="valv" 
+                                headerText="VENDA"
+                                style="width:6%">
+                                <center>
+                                    <h:outputText value="#{item.valorDaVenda}">
+                                        <f:convertNumber pattern="R$ #,##0.00"/>
+                                    </h:outputText>  
+                                </center>
+                            </p:column>
+
+                            <p:column
+                                styleClass="colAdj"
+                                id="lucrov"   
+                                headerText="LUCRO"
+                                style="width:6%">  
+                                <center>
+                                    <h:outputText value="#{item.lucroDaVenda}" >
+                                        <f:convertNumber pattern="R$ #,##0.00"/>    
+                                    </h:outputText>      
+                                </center>
+                            </p:column>
+
+                            <p:column
+                                styleClass="colAdj"
+                                id="pict"   
+                                headerText="FOTO"
+                                style="width:10%">  
+                                <center>
+                                    <p:graphicImage value="#{item.foto}" width="100px" height="80px"/>    
+                                </center>
+                            </p:column>
+
+                        </p:dataTable>
+
+                    </h:form>
+                </p:panel>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

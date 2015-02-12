@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <link href='http://fonts.googleapis.com/css?family=Chicle|Condiment|Oswald' rel='stylesheet' type='text/css' />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/layout.css"/>
+        <h:outputScript name="locale-primefaces.js" library="js" />
+        <!--h:outputScript name="setarFoco.js" library="js" /-->
+        <title>REVESTEBEM<h:outputText value=" - " rendered="#{itemBean.privilegiosUsuario}" />#{itemBean.usuarioCorrente}</title>
+    </h:head>
+
+    <h:form >
+        <h:panelGroup id="loginout">
+<!--            <h:outputText value="#{itemBean.usuarioCorrente}" />-->
+            <h:commandLink class="link-sair" value="Sair" action="#{access.logout()}" />
+        </h:panelGroup>         
+    </h:form>
+
+    <!--    <h:outputLink value="http://www.google.com.br/"  class="link-sair">Sair</h:outputLink>  -->
+
+    <h:body>
+        <div id="topoContent" class="radius" style="background-color: white">
+            <div id="topo" class="topo radius" style="background-color:#CC0202;margin:3px">
+                <div class="titulo" style="color:white">
+                    <ui:insert name="topo">
+                        <div style="float: left">
+                            REVESTEBEM
+                        </div>
+                    </ui:insert>
+                </div>  
+            </div>
+        </div>
+        <div id="conteudo-menu" class="conteudo-menu">
+            <p:layout id="layout">  
+                <p:layoutUnit styleClass="texto-menu" collapsible="true" header="Menu" position="west" resizable="true" size="157" minSize="100">  
+                    <ui:insert name="menu">
+                        <center>
+                            <h:form>
+                                <p:menu style="width: 137px">  
+                                    <p:menuitem value="Início" outcome="welcome.xhtml" icon="ui-icon-home" />
+                                    <p:submenu label="Clientes">
+                                        <p:menuitem value="Adicionar" outcome="adicionaClientes" icon="ui-icon-disk" />
+                                        <p:menuitem value="Listar" outcome="listarClientes" icon="ui-icon-clipboard" onclick="#{itemBean.habilitaListarCliente()}" />
+                                    </p:submenu>
+                                    <p:submenu label="Itens do Estoque">  
+                                        <p:menuitem value="Adicionar" outcome="adicionaItens" icon="ui-icon-disk" onclick="#{itemBean.limpaItemToAdd()}"/>
+                                        <p:menuitem value="Listar" outcome="listaItens" icon="ui-icon-clipboard" onclick="#{itemBean.habilitaListarItem()}"/>  
+                                        <p:menuitem value="Movimentação" outcome="movimentacaoEstoque" icon="ui-icon-extlink"/>  
+                                    </p:submenu>  
+                                    <p:submenu label="Usuários">
+                                        <p:menuitem value="Adicionar" outcome="adicionaUsuario" icon="ui-icon-disk" oncomplete="#{itemBean.takeUsrLista()}"/> 
+                                        <p:menuitem value="Listar" outcome="listaUsuarios" icon="ui-icon-clipboard" onclick="#{itemBean.habilitaListarUsuario()}"/> 
+                                    </p:submenu>
+
+                                </p:menu>  
+                            </h:form>
+                        </center>
+                    </ui:insert>
+                </p:layoutUnit>  
+
+                <p:layoutUnit styleClass="texto-corpo" position="center" >  
+                    <ui:insert name="corpo">
+                    </ui:insert> 
+                </p:layoutUnit>  
+            </p:layout>  
+        </div>
+    </h:body>
+</html>

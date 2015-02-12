@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <body>
+
+        <ui:composition template="./TMP.xhtml">
+
+            <ui:define name="corpo">
+
+                <h:panelGrid rendered="#{itemBean.privilegiosUsuario}">
+
+                    <h:form>
+                        <p:growl id="growl2" showDetail="true" transient="true" sticky="false" life="3000"/>
+
+                        <p:panel header="Adicionar Novo Cliente" >
+
+                            <p:tab>
+
+                                <h:panelGrid id="adClie" columns="2" cellpadding="5">
+
+                                    <h:outputText value="Nome:" />
+                                    <p:inputText value="#{itemBean.cliente.nome}"/>
+
+                                    <h:outputText value="Contatos:" />
+                                    <p:inputTextarea rows="2" cols="40" value="#{itemBean.cliente.contato}" />
+
+                                    <h:outputText value="Emails:" />
+                                    <p:inputTextarea rows="2" cols="40" value="#{itemBean.cliente.email}" />    
+
+                                    <h:outputText value="Skype:" />
+                                    <p:inputText value="#{itemBean.cliente.chat}" /> 
+
+                                    <h:outputText value="Telefone:" />
+                                    <p:inputMask mask="(99) 9999-9999?9" value="#{itemBean.cliente.telefone}" />
+
+                                    <h:outputText value="Modelos:" />
+                                    <p:inputTextarea rows="2" cols="40" value="#{itemBean.cliente.marcas}" /> 
+
+                                    <h:outputText value="Responsável:" />
+                                    <p:inputText  value="#{itemBean.cliente.owner}" required="false"/>   
+
+                                    <h:outputText value="Interações:" />
+                                    <p:inputTextarea rows="2" cols="80" value="#{itemBean.cliente.interacao}" />    
+
+                                    <p:commandButton value="Salvar" action="#{itemBean.addCliente()}" update="@form">
+                                    </p:commandButton>
+                                </h:panelGrid>
+
+                            </p:tab>
+
+                        </p:panel>
+
+                    </h:form>
+
+                </h:panelGrid>
+
+                <h:panelGrid rendered="#{!itemBean.privilegiosUsuario}">
+
+                    <h1 style="color: red">&nbsp;&nbsp;VOCÊ NÃO ESTÁ LOGADO OU NÃO TEM ACESSO AO CONTEÚDO!</h1>
+
+                    <h:form>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p:commandLink styleClass="welcomeLink" action="index.xhtml?faces-redirect=true">REALIZE LOGIN</p:commandLink>,&nbsp;<span class="welcomeTxt">ou contate o administrador do sistema.</span>
+                    </h:form> 
+
+                </h:panelGrid>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

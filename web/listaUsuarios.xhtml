@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./TMP.xhtml">
+
+            <ui:define name="corpo">
+
+                <h:panelGrid rendered="#{itemBean.privilegiosUsuario}">
+
+                    <h:form>
+
+                        <p:growl id="growl" showDetail="true" transient="true" sticky="false" life="3000"/>
+
+                        <p:panel header="Modificar Usuário" rendered="#{itemBean.editarUsuario}">
+
+                            <h:panelGrid id="usrModGrid" columns="2" cellpadding="5">
+
+                                <h:outputText value="Nome:" />
+                                <p:inputText value="#{itemBean.usr.nome}" required="false"/>
+
+                                <h:outputText value="Usuário:" />
+                                <p:inputText value="#{itemBean.usr.usuario}" required="false"/>    
+
+                                <h:outputText value="Email:" />
+                                <p:inputTextarea rows="1" value="#{itemBean.usr.email}" required="false"/>    
+
+                                <h:outputText value="Telefone:" />
+                                <p:inputMask mask="(99) 9999-9999?9" value="#{itemBean.usr.telefone}" required="false" />    
+
+                                <h:outputText value="Administrador:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
+
+                                <h:outputText value="Senha:" />
+                                <p:password value="#{itemBean.usr.senha}" required="false" feedback="true"/> 
+
+                                <p:commandButton value="Salvar" action="#{itemBean.updateUsr()}" update="@form">
+                                </p:commandButton>
+
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:panel header="Usuários do Sistema" rendered="#{!itemBean.editarUsuario}">
+                            <p:dataTable id="usrGrid" var="usrlist" value="#{itemBean.takeUsrLista()}">                   
+                                <p:column styleClass="colAdj"
+                                          style="width:2%" 
+                                          id="idCol" 
+                                          headerText="ID"
+                                          > 
+                                    <center>
+                                        <h:outputText value="#{usrlist.id}">
+
+                                        </h:outputText> 
+                                    </center>
+                                </p:column>
+
+                                <p:column styleClass="colAdj"
+                                          style="width: 10%" 
+                                          id="idUsr" 
+                                          headerText="USUÁRIO"
+                                          > 
+
+                                    <h:outputText value="#{usrlist.usuario}" />
+
+                                </p:column>
+
+                                <p:column styleClass="colAdj"
+                                          style="width: 8%" 
+                                          id="idName" 
+                                          headerText="NOME"
+                                          >  
+                                    <h:outputText value="#{usrlist.nome}">
+
+                                    </h:outputText> 
+                                </p:column>
+
+                                <p:column styleClass="colAdj"
+                                          style="width: 14%" 
+                                          id="idEmail" 
+                                          headerText="E-MAIL"
+                                          >  
+                                    <h:outputText value="#{usrlist.email}">
+
+                                    </h:outputText> 
+                                </p:column>
+
+                                <p:column styleClass="colAdj"
+                                          style="width: 8%" 
+                                          id="idTel" 
+                                          headerText="TELEFONE"
+                                          >  
+                                    <h:outputText value="#{usrlist.telefone}">
+
+                                    </h:outputText> 
+                                </p:column>
+
+                                <p:column styleClass="colAdj"
+                                          style="width: 10%" 
+                                          id="idCadastr" 
+                                          headerText="CADASTRANTE"
+                                          >  
+                                    <h:outputText value="#{usrlist.cadastrante}">
+
+                                    </h:outputText> 
+                                </p:column>
+
+                                <p:column styleClass="colAdj"
+                                          style="width: 12%" 
+                                          id="idData" 
+                                          headerText="CRIADO EM"
+                                          >  
+                                    <h:outputText value="#{usrlist.dataDeCadastro}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="GMT-03:00"/>
+                                    </h:outputText> 
+                                </p:column>
+
+                                <p:column styleClass="colAdj"
+                                          style="width: 4%" 
+                                          id="idAdm" 
+                                          headerText="ADMIN"
+                                          >  
+                                    <center>
+                                        <p:selectBooleanCheckbox value="#{usrlist.administrador}"/> 
+                                    </center>
+                                </p:column>
+
+                                <p:column styleClass="colAdj"
+                                          style="max-width: 8%; min-width:8%; overflow:hidden" 
+                                          id="idOpc" 
+                                          headerText="OPÇÕES"
+                                          >  
+                                    <center>
+
+                                        <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                            <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                            <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                        </p:confirmDialog>
+
+                                        <p:commandLink value="Remover" action="#{itemBean.remUsr(usrlist)}" update="@form">
+                                            <p:confirm header="Confirmation" message="Deseja REMOVER o Usuário ?" icon="ui-icon-trash" />
+                                        </p:commandLink>
+                                        |
+                                        <p:commandLink value="Editar" action="#{itemBean.loadUsr(usrlist)}" update="@form"> 
+
+                                        </p:commandLink>
+
+                                    </center>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </h:form>
+
+                </h:panelGrid>
+
+                <h:panelGrid rendered="#{!itemBean.privilegiosUsuario}">
+
+                    <h1 style="color: red">&nbsp;&nbsp;VOCÊ NÃO ESTÁ LOGADO OU NÃO TEM ACESSO AO CONTEÚDO!</h1>
+
+                    <h:form>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p:commandLink styleClass="welcomeLink" action="index.xhtml?faces-redirect=true">REALIZE LOGIN</p:commandLink>,&nbsp;<span class="welcomeTxt">ou contate o administrador do sistema.</span>
+                    </h:form> 
+
+                </h:panelGrid>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./TMP.xhtml">
+
+            <ui:define name="corpo">
+
+                <h:panelGrid rendered="#{itemBean.privilegiosUsuario}">
+
+                    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage value="/resources/css/imagens/ProgressBar_00.gif" />
+                    </p:dialog>
+
+                    <h:form>
+
+                        <p:dataTable 
+                            id="dataTable" 
+                            style="max-width: 100%; min-width: 100%"
+                            var="movEst" 
+                            value="#{itemBean.listaMoEs()}" 
+                            filteredValue="#{itemBean.filtroMovEst}"
+                            widgetVar="itemTable" 
+                            emptyMessage="Sem resultados para a busca..." 
+                            paginator="true"
+                            rows="15">
+
+                            <p:column styleClass="IdAdj"                               
+                                      id="idCol" 
+                                      headerText="ID"
+                                      style="width:3%"
+                                      >  
+                                <center>
+                                    <h:outputText value="#{movEst.id}">
+                                        <f:convertNumber pattern="#####0000"/> 
+                                    </h:outputText> 
+                                </center>
+                            </p:column>
+
+                            <p:column styleClass="IdItemAdj"                                
+                                      headerText="ID ITEM"
+                                      style="width:4%"
+                                      >  
+                                <center>
+                                    <h:outputText value="#{movEst.movItemId}">
+                                        <f:convertNumber pattern="#####0000"/> 
+                                    </h:outputText> 
+                                </center>
+                            </p:column>
+
+                            <p:column styleClass="nomeAdj"                               
+                                      headerText="SOLIC."
+                                      style="width:8%"
+                                      filterBy="#{movEst.nome}"
+                                      filterMatchMode="contains"
+                                      filterStyle="width:90%"
+                                      >  
+                                <center>
+                                    <h:outputText value="#{movEst.nome}">
+                                    </h:outputText> 
+                                </center>
+                            </p:column>
+
+                            <p:column styleClass="dataAdj"                               
+                                      headerText="DATA"
+                                      style="width:8%"
+                                      filterOptions=""
+                                      >
+                                <center>
+                                    <h:outputText value="#{movEst.dataDeCadastro}">
+                                        <f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="GMT-03:00"/>
+                                    </h:outputText> 
+                                </center>
+                            </p:column>
+
+                            <p:column styleClass="qtdAdj"                               
+                                      headerText="QBX"
+                                      style="width:7%"
+                                      filterOptions=""
+                                      >
+                                <center>
+                                    <h:outputText value="#{movEst.quantRetirada}">
+                                        <f:convertNumber pattern="0"/>
+                                    </h:outputText> 
+                                </center>
+                            </p:column>
+
+                            <p:column styleClass="mkpAdj"                               
+                                      headerText="MKP"
+                                      style="width:5%"
+                                      filterOptions=""
+                                      >
+                                <center>
+                                    <h:outputText value="#{(movEst.markupEfetivo/100)}">
+                                        <f:convertNumber pattern="#,##% 0.00"/>
+                                    </h:outputText> 
+                                </center>
+                            </p:column>
+
+                            <p:column styleClass="descAdj"                               
+                                      headerText="DESC."
+                                      style="width:8%"
+                                      >
+                                <center>
+                                    <h:outputText value="#{itemBean.descItem(movEst.movItemId)}">
+                                        <f:convertNumber pattern="0"/>
+                                    </h:outputText>
+                                </center>
+
+                            </p:column>
+
+                            <p:column styleClass="marcaAdj"                               
+                                      headerText="MARCA"
+                                      style="width:8%"
+                                      >
+                                <center>
+                                    <h:outputText value="#{itemBean.marcaItem(movEst.movItemId)}"></h:outputText>
+                                </center>
+
+                            </p:column>
+
+                            <p:column styleClass="modAdj"                               
+                                      headerText="MODELO"
+                                      style="width:8%"
+                                      filterStyle="width:90%"
+                                      >
+                                <center>
+                                    <p:inputTextarea value="#{itemBean.modeloItem(movEst.movItemId)}" cols="6" rows="4" style="font-weight: bold" readonly="true"/>    
+                                </center>
+
+                            </p:column>
+
+                            <p:column styleClass="vendaAdj"                               
+                                      headerText="VENDA"
+                                      style="width:8%"
+                                      >
+                                <center>
+                                    <h:outputText value="#{movEst.vendaEfetiva}">
+                                        <f:convertNumber pattern="R$ ###0.00"/>
+                                    </h:outputText>
+                                </center>
+
+                            </p:column>
+
+                            <p:column styleClass="ganhoAdj"                               
+                                      headerText="GANHO"
+                                      style="width:8%"
+                                      >
+                                <center>
+                                    <h:outputText value="#{movEst.ganhoEfetivo}">
+                                        <f:convertNumber pattern="R$ ###0.00"/>
+                                    </h:outputText>
+                                </center>
+                            </p:column>
+
+                            <p:column styleClass="nomeAdj"                               
+                                      headerText="OBS"
+                                      style="width:8%"
+                                      filterBy="#{movEst.obs}"
+                                      filterMatchMode="contains"
+                                      filterStyle="width:90%"
+                                      >  
+                                <center>
+                                    <h:outputText value="#{movEst.obs}"></h:outputText> 
+                                </center>
+                            </p:column>
+                        </p:dataTable>               
+                    </h:form>
+
+                </h:panelGrid>
+
+                <h:panelGrid rendered="#{!itemBean.privilegiosUsuario}">
+
+                    <h1 style="color: red">&nbsp;&nbsp;VOCÊ NÃO ESTÁ LOGADO OU NÃO TEM ACESSO AO CONTEÚDO!</h1>
+
+                    <h:form>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p:commandLink styleClass="welcomeLink" action="index.xhtml?faces-redirect=true">REALIZE LOGIN</p:commandLink>,&nbsp;<span class="welcomeTxt">ou contate o administrador do sistema.</span>
+                    </h:form> 
+
+                </h:panelGrid>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

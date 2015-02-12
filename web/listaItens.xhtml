@@ -1,0 +1,967 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./TMP.xhtml">
+
+            <ui:define name="corpo" >
+
+                <h:panelGrid rendered="#{itemBean.privilegiosUsuario}">
+
+                    <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                        <p:graphicImage value="/resources/css/imagens/ProgressBar_00.gif" />
+                    </p:dialog>
+
+                    <h:form id="formLista">
+
+                        <p:growl id="growl" showDetail="true" sticky="false" life="3000"/>
+
+                        <h:panelGrid rendered="#{itemBean.editarEstoque}" style="width: 100%">
+
+                            <p:panel header="Alteração de Estoque do item #{itemBean.item.descricao} #{itemBean.item.modelo} Valor R$ #{itemBean.item.valorDaVenda}" >
+
+                                <h:panelGrid id="baixaEstoque" columns="4" cellpadding="5">
+
+                                    <h:outputText value="Quantidade atual:" />
+                                    <h:inputHidden />
+                                    <p:inputText value="#{itemBean.mov.quantInicial}" required="false" readonly="true" style="color: blue; font-size: 22px">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </p:inputText>
+                                    <h:inputHidden />
+
+                                    <h:outputText value="Unidades a dar baixa:" />
+                                    <h:inputHidden />
+                                    <p:inputText value="#{itemBean.mov.quantRetirada}" required="false" style="color: red; font-size: 32px; width: 140px" >
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                        <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="@form" listener="#{itemBean.calcAltEstoque()}"/>
+                                    </p:inputText> 
+                                    <h:inputHidden />
+
+                                    <h:outputText value="Quantidade final:" />
+                                    <h:inputHidden />
+                                    <p:inputText id="quantFinal" value="#{itemBean.mov.quantFinal}" required="false" style="color: darkblue; font-size: 22px">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </p:inputText>
+                                    <h:inputHidden />
+
+                                    <br />
+                                    <h:inputHidden />
+                                    <h:inputHidden />
+                                    <h:inputHidden />
+
+
+                                    <h:outputText value="Valor do Item:" />
+                                    <h:outputLabel value="R$"/>
+                                    <p:inputText id="valItem" value="#{itemBean.item.valorDaVenda}" required="false" readonly="true" style="color: darkblue; font-size: 22px">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </p:inputText>
+                                    <h:inputHidden />
+
+                                    <h:outputText value="Markup:" />
+                                    <h:inputHidden />
+                                    <p:inputText value="#{itemBean.mov.markupEfetivo}" required="false" style="color: red; font-size: 32px; width: 235px" >
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                        <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="@form" listener="#{itemBean.calcAltEstoque()}"/>
+                                    </p:inputText> 
+                                    <h:outputText value="%" style="float: left"/>
+
+                                    <h:outputText value="Valor Final:" />
+                                    <h:outputLabel value="R$"/>
+                                    <p:inputText id="valFinItem" value="#{itemBean.mov.vendaEfetiva}" style="color: red; font-size: 32px; width: 235px">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                        <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"  process="@form" update="@form" listener="#{itemBean.calcAltMkp()}"/>
+                                    </p:inputText>
+                                    <h:inputHidden />
+
+                                    <h:outputText value="Ganho:" />
+                                    <h:outputLabel value="R$"/>
+                                    <p:inputText id="valGanho" value="#{itemBean.mov.ganhoEfetivo}" required="false" style="color: darkblue; font-size: 22px">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </p:inputText>
+                                    <h:inputHidden />
+
+                                    <h:outputText value="Motivo:" />
+                                    <h:inputHidden />
+                                    <p:inputTextarea value="#{itemBean.mov.obs}" required="false" cols="29" rows="3" onkeyup="this.value = this.value.toUpperCase()"/> 
+                                    <h:inputHidden />
+
+                                </h:panelGrid>
+
+                                <ui:remove><!--######################################################--></ui:remove>
+                                <br/>
+                                <p:commandButton 
+                                    value="Voltar" 
+                                    action="#{itemBean.habilitaListarItem()}"
+                                    update="@form"
+                                    style="width: 130px"
+                                    icon="ui-icon-arrowreturnthick-1-w"
+                                    />
+                                &nbsp;&nbsp;
+                                <p:commandButton 
+                                    value="Salvar" 
+                                    action="#{itemBean.alteraEstoqueItem()}" 
+                                    update="@form"
+                                    style="width: 130px"
+                                    icon="ui-icon-disk"
+                                    >
+                                    <p:confirm 
+                                        header="Confirmation" 
+                                        message="Deseja ALTERAR O ESTOQUE do Item ?" 
+                                        icon="ui-icon-trash" />
+                                </p:commandButton>
+                                <h:inputHidden />
+                                <ui:remove><!--######################################################--></ui:remove>
+
+                            </p:panel>
+                        </h:panelGrid>
+
+                        <h:panelGrid rendered="#{itemBean.editarItem}" style="width: 100%">
+
+                            <h3>Alteração de Item do Estoque da Revestebem</h3>
+
+                            <p:tabView effect="slide" effectDuration="normal" id="tabItemEdit" styleClass="textoTitulo1">
+
+                                <p:tab title="Descrição do Item">
+
+                                    <h:panelGrid id="descGrid" columns="2" cellpadding="5">
+
+                                        <h:outputText value="Marca:" />          
+                                        <p:selectOneMenu id="console" value="#{itemBean.item.marca}" effect="fold" editable="true" style="width: 180px" onkeyup="this.value = this.value.toUpperCase()">
+                                            <f:selectItem itemLabel="" itemValue=""  />
+                                            <f:selectItem itemLabel="KYOCERA" itemValue="KYOCERA" />    
+                                            <f:selectItem itemLabel="BEMATECH" itemValue="BEMATECH" />
+                                            <f:selectItem itemLabel="CANON" itemValue="CANON" />
+                                            <f:selectItem itemLabel="BROTHER" itemValue="BROTHER" />
+                                            <f:selectItem itemLabel="SAMSUNG" itemValue="SAMSUNG" />
+                                            <f:selectItem itemLabel="RICOH" itemValue="RICOH" />
+                                            <f:selectItem itemLabel="HP" itemValue="HP" />
+                                            <f:selectItem itemLabel="LEXMARK" itemValue="LEXMARK" />
+                                            <f:selectItem itemLabel="XEROX" itemValue="XEROX" />
+                                            <f:selectItem itemLabel="DARUMA" itemValue="DARUMA" />
+                                            <f:selectItem itemLabel="EPSON" itemValue="EPSON" />
+                                            <f:selectItem itemLabel="MECAF" itemValue="MECAF" />
+                                            <f:selectItem itemLabel="OKIDATA" itemValue="OKIDATA" />
+                                            <f:selectItem itemLabel="ZEBRA" itemValue="ZEBRA" />
+                                        </p:selectOneMenu>
+
+                                        <h:outputText value="Modelos:" />
+                                        <p:inputTextarea value="#{itemBean.item.modelo}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="Modelos que utilizam o Item" cols="20" rows="3"/>    
+
+                                        <h:outputText value="Equivalência:" />
+                                        <p:inputTextarea value="#{itemBean.item.equivalencia}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="Modelos que utilizam o Item" cols="40" rows="3"/>    
+
+                                        <h:outputText value="Descrição:" />
+                                        <p:inputTextarea value="#{itemBean.item.descricao}" 
+                                                         onkeyup="this.value = this.value.toUpperCase()"
+                                                         required="true"
+                                                         requiredMessage="Descreva o Item!"
+                                                         cols="40" 
+                                                         rows="1" />
+                                        <h:outputText value="Description:" />
+                                        <p:inputText value="#{itemBean.item.description}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="Descrição do Item em Inglês"/>
+
+                                        <h:outputText value="Peso:" />
+                                        <p:inputText value="#{itemBean.item.peso}" required="false" label="Peso do Item" >
+                                            <f:convertNumber pattern="#,####0.0000"/>  
+                                        </p:inputText>                                    
+
+                                        <h:outputText value="Código OEM:" />
+                                        <p:inputText value="#{itemBean.item.codOem}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="Id do frabicante do Item"/>
+
+                                        <h:outputText value="Fabricante:" />
+                                        <p:inputText value="#{itemBean.item.fabricante}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="Data de compra ou controle de importação do Item"/>
+
+                                        <h:outputText value="Fornecedor:" />
+                                        <p:inputText value="#{itemBean.item.fornecedor}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="Fornecedor do Item"/>
+
+                                    </h:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="Localização">
+                                    <h:panelGrid id="locGrid" columns="2" cellpadding="5">
+
+
+                                        <h:outputText value="Armário:" />
+                                        <p:autoComplete size="2" id="arm" dropdown="true" value="#{itemBean.item.armario}" completeMethod="#{itemBean.completaArmario}" onkeyup="this.value = this.value.toUpperCase()"/>
+
+
+                                        <h:outputText value="Prateleira:" />
+                                        <p:autoComplete size="2" id="pra" dropdown="true" value="#{itemBean.item.prateleira}" completeMethod="#{itemBean.completaPrateleira}" onkeyup="this.value = this.value.toUpperCase()"/>
+
+                                    </h:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="Dados Financeiros">  
+                                    <h:panelGrid id="finGrid" columns="3" cellpadding="5"> 
+
+                                        <h:outputText value="Quantidade:" />
+                                        <h:inputHidden />
+                                        <p:inputText value="#{itemBean.item.quantidade}" required="false" label="Quantidade do Item em estoque">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                            <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="finGrid @form" listener="#{itemBean.calculaItem()}"/>
+                                        </p:inputText>
+
+                                        <h:outputText value="Taxa de Câmbio:" />
+                                        <h:inputHidden />
+                                        <p:inputText value="#{itemBean.item.taxaDeCambio}" required="false" label="Taxa de câmbio utilizada na compra do item">
+                                            <f:convertNumber pattern="#,####0.0000"/>
+                                        </p:inputText>
+
+                                        <h:outputText value="Preço Mínimo:" />
+                                        <h:outputText value="$" style="float: right"/>
+                                        <p:inputText value="#{itemBean.item.precoMinimo}" required="false" label="Custo do Item no Exteriror em USD">
+                                            <f:convertNumber pattern="#,##0.00" />
+                                        </p:inputText>
+
+                                        <h:outputText value="Preço Máximo:" />
+                                        <h:outputText value="$" style="float: right"/>
+                                        <p:inputText value="#{itemBean.item.precoMaximo}" required="false" label="Custo base do Item no Exteriror em USD">
+                                            <f:convertNumber pattern="#,##0.00" />
+                                        </p:inputText>
+
+                                        <h:outputText value="Custo do Produto:" />
+                                        <h:outputText value="R$" style="float: right"/>
+                                        <p:inputText value="#{itemBean.item.custoDoProduto}" required="false" label="Custo total do Item">       
+                                            <f:convertNumber pattern="#,##0.00" />
+                                            <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="finGrid @form" listener="#{itemBean.calculaItem()}"/>
+                                        </p:inputText>
+
+                                    </h:panelGrid>
+                                </p:tab> 
+
+                                <p:tab title="Margens">  
+                                    <h:panelGrid columns="3" cellpadding="5"> 
+
+                                        <h:outputText value="Reposição do Item:" />
+                                        <p:inputText value="#{itemBean.item.reposicao}" required="false" label="Custo para repor o Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>                                    
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="Impostos:" />
+                                        <p:inputText value="#{itemBean.item.impostos}" required="false" label="Custo para pagar impostos sobre o Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>                                    
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="Frete:" />
+                                        <p:inputText value="#{itemBean.item.frete}" required="false" label="Custo para pagar frete do Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>                                    
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="Custo Operacional:" />
+                                        <p:inputText value="#{itemBean.item.custoOperacional}" required="false" label="Contribuição para o Custo Operacional sobre o Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>                                    
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="Custo Indireto:" />
+                                        <p:inputText value="#{itemBean.item.custoIndireto}" required="false" label="Custos indiretos o Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>                                    
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="Previsão de Perdas:" />
+                                        <p:inputText value="#{itemBean.item.previsaoDePerdas}" required="false" label="Previsão de perdas sobre o Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>                                   
+                                        <h:outputText value="%" style="float: left"/>
+
+                                    </h:panelGrid>
+                                </p:tab> 
+
+                                <p:tab title="Dados Fiscais">  
+                                    <h:panelGrid columns="4" cellpadding="5"> 
+
+                                        <h:outputText value="Importação:"  />
+                                        <h:inputHidden/>
+                                        <p:inputText value="#{itemBean.item.origem}" onkeyup="this.value = this.value.toUpperCase()"/>                                    
+                                        <h:inputHidden/>
+
+                                        <h:outputText value="NFe:" />
+                                        <h:inputHidden/>
+                                        <p:inputText value="#{itemBean.item.nfeEntrada}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="Nota Fiscal de entrda do Item"/>
+                                        <h:inputHidden/>
+
+                                        <h:outputText value="NCM:" />
+                                        <h:inputHidden/>
+                                        <p:inputMask value="#{itemBean.item.ncm}" mask="9999.99.99" required="false" label="NCM do Item"/>                                    
+                                        <h:inputHidden/>
+
+                                        <h:outputText value="II:" />
+                                        <h:inputHidden/>
+                                        <p:inputText value="#{itemBean.item.ii}" required="false" label="II do Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>                                    
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="IPI:" />
+                                        <h:inputHidden/>
+                                        <p:inputText value="#{itemBean.item.ipi}" required="false" label="IPI do Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>                                    
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="PIS:" />
+                                        <h:inputHidden/>
+                                        <p:inputText value="#{itemBean.item.pis}" required="false" label="PIS do Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>         
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="COFINS:" />
+                                        <h:inputHidden/>
+                                        <p:inputText value="#{itemBean.item.cofins}" required="false" label="COFINS do Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>         
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="ICMS:" />
+                                        <h:inputHidden/>
+                                        <p:inputText value="#{itemBean.item.icms}" required="false" label="ICMS do Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText>         
+                                        <h:outputText value="%" style="float: left"/>
+
+                                        <h:outputText value="ST:" />
+                                        <h:outputText value="R$" style="float: right"/>
+                                        <p:inputText value="#{itemBean.item.st}" required="false" label="ST do Item">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </p:inputText> 
+                                        <h:inputHidden/>
+
+                                    </h:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="Motivo">
+                                    <h:panelGrid columns="4" cellpadding="5"> 
+
+                                        <h:outputText value="Categoria:" />   
+                                        <h:inputHidden/>
+                                        <p:selectOneMenu value="#{itemBean.item.categoria}" effect="fold" editable="true" style="width: 210px" onkeyup="this.value = this.value.toUpperCase()">
+                                            <f:selectItem itemLabel="" itemValue=""  />
+                                            <f:selectItem itemLabel="REVENDA" itemValue="REVENDA" />    
+                                            <f:selectItem itemLabel="PRODUTOS E SERVIÇOS" itemValue="SERVICOEPRODUTOS" />
+                                            <f:selectItem itemLabel="SERVIÇO" itemValue="SERVICO" />
+                                            <f:selectItem itemLabel="USO E CONSUMO" itemValue="USOECONSUMO" />
+                                            <f:selectItem itemLabel="AMOSTRA PARA TESTES" itemValue="AMOSTRA" />
+                                            <f:selectItem itemLabel="PRODUTO PARA ANÁLISE" itemValue="ANALISE" />
+                                            <f:selectItem itemLabel="PRODUTO REMAN." itemValue="REMANUFATURADO" />
+                                            <f:selectItem itemLabel="PRODUTO NÃO REMAN." itemValue="NAOREMANUFATURADO" />
+                                        </p:selectOneMenu>
+                                        <h:inputHidden/>
+
+                                        <h:outputText value="Reserva:" />      
+                                        <h:inputHidden/>
+                                        <p:inputTextarea rows="2" value="#{itemBean.item.reserva}" onkeyup="this.value = this.value.toUpperCase()" required="false"/>
+                                        <h:inputHidden/>
+
+                                        <h:outputText value="Solicitante:" />   
+                                        <h:inputHidden/>
+                                        <p:inputText value="#{itemBean.item.solicitante}" onkeyup="this.value = this.value.toUpperCase()" required="false"/>
+                                        <h:inputHidden/>
+
+                                    </h:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="Valores">
+
+                                    <p:accordionPanel   activeIndex="-1" style="width:40%">
+
+                                        <p:tab title="PREÇO MÁXIMO R$ #{itemBean.item.valorDaVenda_C}">
+
+                                            <h:panelGrid id="valGrid_C" columns="4" cellpadding="5"> 
+                                                <h:outputText value="Markup:" />
+                                                <h:inputHidden/>
+                                                <p:inputText value="#{itemBean.item.markup_C}"  required="false" label="Lucro real sobre o item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                    <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="@form" listener="#{itemBean.calculaItem_C()}"/>
+                                                </p:inputText>
+                                                <h:outputText value="%" style="float: left"/>
+
+                                                <h:outputText value="Valor de Venda:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.valorDaVenda_C}" required="false" label="Valor de venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                    <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="@form" listener="#{itemBean.calcAltMkpItem_C()}"/>
+                                                </p:inputText>                                    
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="Lucro da Venda:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.lucroDaVenda_C}" required="false" label="Retorno da venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText>                                    
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="Valor Total:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.valorTotal_C}" required="false" label="Valor total do Item no estoque">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText>  
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="Lucro Total:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.lucroTotal_C}" required="false" label="Retorno total da venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText> 
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="OBS.:" />
+                                                <h:inputHidden/>
+                                                <p:inputTextarea value="#{itemBean.item.obs_C}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="OBS. Gerais"/>
+                                                <h:inputHidden/>
+
+                                            </h:panelGrid>
+
+                                        </p:tab>
+
+                                        <p:tab title="PREÇO MÉDIO  R$ #{itemBean.item.valorDaVenda_B}">
+
+                                            <h:panelGrid id="valGrid_B" columns="4" cellpadding="5"> 
+                                                <h:outputText value="Markup:" />
+                                                <h:inputHidden/>
+                                                <p:inputText value="#{itemBean.item.markup_B}"  required="false" label="Lucro real sobre o item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                    <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="@form" listener="#{itemBean.calculaItem_B()}"/>
+                                                </p:inputText>
+                                                <h:outputText value="%" style="float: left"/>
+
+                                                <h:outputText value="Valor de Venda:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.valorDaVenda_B}" required="false" label="Valor de venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                    <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="@form" listener="#{itemBean.calcAltMkpItem_B()}"/>
+                                                </p:inputText>                                    
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="Lucro da Venda:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.lucroDaVenda_B}" required="false" label="Retorno da venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText>                                    
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="Valor Total:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.valorTotal_B}" required="false" label="Valor total do Item no estoque">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText>  
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="Lucro Total:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.lucroTotal_B}" required="false" label="Retorno total da venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText> 
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="OBS.:" />
+                                                <h:inputHidden/>
+                                                <p:inputTextarea value="#{itemBean.item.obs_B}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="OBS. Gerais"/>
+                                                <h:inputHidden/>
+
+                                            </h:panelGrid>
+
+                                        </p:tab>
+
+                                        <p:tab title="PREÇO MÍNIMO R$ #{itemBean.item.valorDaVenda_A}">
+
+                                            <h:panelGrid id="valGrid_A" columns="4" cellpadding="5"> 
+                                                <h:outputText value="Markup:" />
+                                                <h:inputHidden/>
+                                                <p:inputText value="#{itemBean.item.markup_A}"  required="false" label="Lucro real sobre o item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                    <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="@form" listener="#{itemBean.calculaItem_A()}"/>
+                                                </p:inputText>
+                                                <h:outputText value="%" style="float: left"/>
+
+                                                <h:outputText value="Valor de Venda:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.valorDaVenda_A}" required="false" label="Valor de venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                    <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="@form" listener="#{itemBean.calcAltMkpItem_A()}"/>
+                                                </p:inputText>                                    
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="Lucro da Venda:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.lucroDaVenda_A}" required="false" label="Retorno da venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText>                                    
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="Valor Total:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.valorTotal_A}" required="false" label="Valor total do Item no estoque">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText>  
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="Lucro Total:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.lucroTotal_A}" required="false" label="Retorno total da venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText> 
+                                                <h:inputHidden/>
+
+                                                <h:outputText value="OBS.:" />
+                                                <h:inputHidden/>
+                                                <p:inputTextarea value="#{itemBean.item.obs_A}" onkeyup="this.value = this.value.toUpperCase()" required="false" label="OBS. Gerais"/>
+                                                <h:inputHidden/>
+
+                                            </h:panelGrid>
+
+                                        </p:tab>
+
+                                        <!--p:tab title="+" titleStyle="width:30px">
+    
+                                            <h:panelGrid id="valGrid" columns="4" cellpadding="5"> 
+    
+                                                <h:outputText value="Markup:" />
+                                                <h:inputHidden/>
+                                                <p:inputText value="#{itemBean.item.markup}"  required="false" label="Lucro real sobre o item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                    <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="valGrid" listener="#{itemBean.calculaItem()}"/>
+                                                </p:inputText>
+                                                <h:outputText value="%" style="float: left"/>
+    
+                                                <h:outputText value="Valor de Venda:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.valorDaVenda}" required="false" label="Valor de venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                    <p:ajax onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" process="@form" update="@form" listener="#{itemBean.calcAltMkpItem()}"/>
+                                                </p:inputText>                                    
+                                                <h:inputHidden/>
+    
+                                                <h:outputText value="Lucro da Venda:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.lucroDaVenda}" required="false" label="Retorno da venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText>                                    
+                                                <h:inputHidden/>
+    
+                                                <h:outputText value="Valor Total:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.valorTotal}" required="false" label="Valor total do Item no estoque">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText>  
+                                                <h:inputHidden/>
+    
+                                                <h:outputText value="Lucro Total:" />
+                                                <h:outputText value="R$" style="float: right"/>
+                                                <p:inputText value="#{itemBean.item.lucroTotal}" required="false" label="Retorno total da venda do Item">
+                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                </p:inputText> 
+                                                <h:inputHidden/>
+    
+                                                <h:outputText value="OBS.:" />
+                                                <h:inputHidden/>
+                                                <p:inputTextarea value="#{itemBean.item.obs}" required="false" label="OBS. Gerais"/>
+                                                <h:inputHidden/> 
+    
+                                            </h:panelGrid>
+    
+                                        </p:tab-->
+
+                                    </p:accordionPanel>
+
+                                </p:tab>
+
+                                <p:tab title="Imagem">  
+                                    <h:panelGrid id="valPic" cellpadding="5">
+
+                                        <p:fileUpload fileUploadListener="#{itemBean.imagem.upload}" 
+                                                      allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                                                      sizeLimit="100000000" 
+                                                      update="valPic"
+                                                      label="Selecionar"
+                                                      uploadLabel="Upload"
+                                                      cancelLabel="Cancelar"
+                                                      >
+
+                                        </p:fileUpload>
+
+                                        <p:graphicImage id="grapImg" value="#{itemBean.imagem.imagemCorrente(itemBean.item)}" width="500px" height="400px"/>
+
+                                    </h:panelGrid>
+                                </p:tab>
+
+                                <p:tab title="Outros">
+                                    <h:panelGrid id="otrosGrid" columns="2" cellpadding="5">
+
+                                        <h:outputText value="Alterado por : "/>
+                                        <h:outputText value="#{itemBean.item.usuarioUltimaModificacao}">
+                                            <f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="GMT-03:00"/>
+                                        </h:outputText>
+
+                                        <h:outputText value="Última Alteração : "/>
+                                        <h:outputText value="#{itemBean.item.dataUltimaModificacao}">
+                                            <f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="GMT-03:00"/>
+                                        </h:outputText>
+
+                                        <h:outputText value="Usuário Criador : "/>
+                                        <h:outputText value="#{itemBean.item.cadastrante}">
+                                            <f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="GMT-03:00"/>
+                                        </h:outputText>
+
+                                        <h:outputText value="Inserido em : "/>
+                                        <h:outputText value="#{itemBean.item.dataDeCadastro}">
+                                            <f:convertDateTime pattern="dd-MM-yyyy HH:mm:ss" timeZone="GMT-03:00"/>
+                                        </h:outputText>
+
+                                    </h:panelGrid>
+                                </p:tab>
+
+                            </p:tabView>
+
+                            <ui:remove><!--######################################################--></ui:remove>
+                            <br/>
+
+                            <h:panelGrid columns="2" cellpadding="5px">
+
+                                <p:commandButton 
+                                    value="Voltar" 
+                                    action="#{itemBean.habilitaListarItem()}"
+                                    update="@form"
+                                    style="width: 130px"
+                                    icon="ui-icon-arrowreturnthick-1-w"
+                                    />
+                                <p:commandButton 
+                                    value="Salvar" 
+                                    action="#{itemBean.comitaEdicaoItem()}" 
+                                    update="@form"
+                                    style="width: 130px"
+                                    icon="ui-icon-disk"
+                                    >
+                                    <p:confirm 
+                                        header="Confirmation" 
+                                        message="Deseja ALTERAR AS INFORMAÇÕES do Item ?" 
+                                        icon="ui-icon-trash" >
+                                        <p:confirm header="Confirmation" message="Deseja modificar o Item ?" icon="ui-icon-disk" />
+                                    </p:confirm>
+                                </p:commandButton>
+                            </h:panelGrid>
+
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" update="@form"/>
+                                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" update="@form"/>
+                            </p:confirmDialog>
+                            <ui:remove><!--######################################################--></ui:remove>
+
+                        </h:panelGrid>
+
+                        <p:dataTable
+                            id="dataTable" 
+                            style="max-width: 100%; min-width: 100%"
+                            var="item" 
+                            value="#{mbItem.lista}" 
+                            widgetVar="itemTable" 
+                            emptyMessage="Sem resultados para a busca..." 
+                            filteredValue="#{mbItem.filtroItems}"
+                            paginator="true"
+                            rows="15"
+                            rowsPerPageTemplate="5, 10, 15, 20, 30, 50, 75, 100"
+                            rendered="#{itemBean.listarItem}"
+                            >
+
+                            <p:column styleClass="colAdj align-center"                               
+                                      id="idCol" 
+                                      headerText="ID"
+                                      style="width:3%"
+                                      >  
+
+                                <h:outputText value="#{item.id}" styleClass="textHover">
+                                    <f:convertNumber pattern="#####0000"/> 
+                                </h:outputText> 
+                            </p:column>
+
+                            <p:column          
+                                styleClass="colAdj"
+                                id="desc"               
+                                filterBy="#{item.descricao}"   
+                                filterStyle="width:90%"
+                                headerText="DESCRIÇÃO"
+                                filterMatchMode="contains"
+                                style="width:8%"
+                                >     
+                                <h:outputText value="#{item.descricao}" styleClass="textHover" >
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="marca"               
+                                filterBy="#{item.marca}" 
+                                filterStyle="width:90%"
+                                headerText="MARCA"
+                                filterMatchMode="contains"
+                                style="width:6%">     
+                                <h:outputText value="#{item.marca}" styleClass="textHover">
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj align-center"
+                                id="modelo"               
+                                filterBy="#{item.modelo}"   
+                                headerText="MODELO"
+                                filterMatchMode="contains"
+                                style="width:8%"
+                                filterStyle="width:90%"
+                                >     
+
+                                <p:inputTextarea value="#{item.modelo}" cols="8" rows="4" style="font-weight: bold" readonly="true"/>    
+
+                            </p:column>
+
+
+                            <p:column 
+                                styleClass="colAdj align-center"
+                                id="equiv"               
+                                filterBy="#{item.equivalencia}"   
+                                headerText="EQUIV."
+                                filterMatchMode="contains"
+                                style="width:8%"
+                                filterStyle="width:90%"
+                                >     
+
+                                <p:inputTextarea value="#{item.equivalencia}" cols="8" rows="4" style="font-weight: bold" readonly="true"/>    
+
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj"
+                                id="origem" 
+                                filterBy="#{item.origem}"
+                                filterStyle="width:90%"
+                                headerText="ORIGEM"
+                                filterMatchMode="contains"
+                                style="width:6%"
+                                >  
+                                <h:outputText value="#{item.origem}" styleClass="textHover">
+                                </h:outputText>  
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj align-center"
+                                id="quantidade"                    
+                                headerText="QUANT."
+                                style="width:4%">  
+
+                                <h:outputText value="#{item.quantidade}" styleClass="yellowText yellowTexthover">
+                                    <f:convertNumber pattern="#0"/>
+                                </h:outputText>  
+                            </p:column>
+
+                            <p:column 
+                                styleClass="colAdj align-center"
+                                id="custo"    
+                                headerText="CUSTO"
+                                style="width:5%">  
+
+                                <h:outputText value="#{item.custoDoProduto}" styleClass="textHover">
+                                    <f:convertNumber pattern="R$ #,##0.00"/>
+                                </h:outputText>  
+
+                            </p:column>
+
+                            <p:column rendered="#{itemBean.verValores_C}" 
+                                      styleClass="colAdj align-center"
+                                      headerText="CLASS."
+                                      style="width:3%">
+
+                                <p:commandLink styleClass="maximo textHover">
+                                    <h:outputText value="MÁX." styleClass="maximo textHover" />
+                                    <p:ajax process="@form" update="@form" listener="#{itemBean.visualizaToggle()}"/>
+                                </p:commandLink>
+
+                            </p:column>
+
+                            <p:column rendered="#{itemBean.verValores_B}" 
+                                      styleClass="colAdj align-center"
+                                      headerText="CLASS."
+                                      style="width:3%">
+
+                                <p:commandLink styleClass="medio textHover">
+                                    <h:outputText value="MÉD." styleClass="medio textHover" />
+                                    <p:ajax process="@form" update="@form" listener="#{itemBean.visualizaToggle()}"/>
+                                </p:commandLink>
+
+                            </p:column>
+
+                            <p:column rendered="#{itemBean.verValores_A}" 
+                                      styleClass="colAdj align-center"
+                                      headerText="CLASS."
+                                      style="width:3%">
+
+                                <p:commandLink styleClass="medio textHover">
+                                    <h:outputText value="MÍN." styleClass="minimo textHover" />
+                                    <p:ajax process="@form" update="@form" listener="#{itemBean.visualizaToggle()}"/>
+                                </p:commandLink>
+
+                            </p:column>
+
+                            <p:column  rendered="#{itemBean.verValores_C}"
+                                       styleClass="colAdj align-center"
+                                       headerText="VENDA"
+                                       style="width:8%">
+
+                                <h:outputText value="#{item.valorDaVenda_C}" styleClass="maximo textHover">
+                                    <f:convertNumber pattern="R$ #,##0.00"/>
+                                </h:outputText>  
+
+                            </p:column>
+
+                            <p:column rendered="#{itemBean.verValores_C}"
+                                      styleClass="colAdj align-center"  
+                                      headerText="LUCRO"
+                                      style="width:5%">  
+
+                                <h:outputText value="#{item.lucroDaVenda_C}" styleClass="maximo textHover">
+                                    <f:convertNumber pattern="R$ #,##0.00"/>    
+                                </h:outputText>
+
+                            </p:column>
+
+
+                            <p:column  rendered="#{itemBean.verValores_B}"
+                                       styleClass="colAdj align-center" 
+                                       headerText="VENDA"
+                                       style="width:8%">
+
+                                <h:outputText value="#{item.valorDaVenda_B}" styleClass="medio textHover">
+                                    <f:convertNumber pattern="R$ #,##0.00"/>
+                                </h:outputText>  
+
+                            </p:column>
+
+                            <p:column rendered="#{itemBean.verValores_B}"
+                                      styleClass="colAdj align-center" 
+                                      headerText="LUCRO"
+                                      style="width:5%">  
+
+                                <h:outputText value="#{item.lucroDaVenda_B}" styleClass="medio textHover">
+                                    <f:convertNumber pattern="R$ #,##0.00"/>    
+                                </h:outputText>
+
+                            </p:column>                           
+
+
+                            <p:column  rendered="#{itemBean.verValores_A}"
+                                       styleClass="colAdj align-center"                               
+                                       headerText="VENDA"
+                                       style="width:8%">
+
+                                <h:outputText value="#{item.valorDaVenda_A}" styleClass="minimo textHover">
+                                    <f:convertNumber pattern="R$ #,##0.00"/>
+                                </h:outputText>  
+
+                            </p:column>
+
+                            <p:column rendered="#{itemBean.verValores_A}"
+                                      styleClass="colAdj align-center"
+                                      headerText="LUCRO"
+                                      style="width:5%">  
+
+                                <h:outputText value="#{item.lucroDaVenda_A}" styleClass="minimo textHover">
+                                    <f:convertNumber pattern="R$ #,##0.00"/>    
+                                </h:outputText>
+
+                            </p:column>                          
+
+                            <p:column
+                                styleClass="colAdj align-center"
+                                id="pict"   
+                                headerText="FOTO"
+                                style="width:8%">  
+
+                                <p:graphicImage value="#{item.foto}" width="100px" height="80px"/>    
+
+                            </p:column>
+
+                            <p:column 
+                                id="opcoes"  
+                                exportable="false"   
+                                headerText="OPÇÕES"
+                                styleClass="ColOpcoes"
+                                >
+
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+
+
+                                <p:commandLink  class="menuHover" 
+                                                value="Remover" 
+                                                action="#{itemBean.removeItem(item)}" 
+                                                rendered="#{itemBean.privilegiosUsuario}" 
+                                                update="dataTable @form">
+                                    <p:confirm header="Confirmation" 
+                                               message="Deseja REMOVER o Item ?" 
+                                               icon="ui-icon-trash" />
+                                </p:commandLink>
+
+                                <div>
+                                    <p:commandLink styleClass="menuHover" 
+                                                   value="Detalhar" 
+                                                   action="#{itemBean.editaItem(item)}" 
+                                                   rendered="#{itemBean.privilegiosUsuario}" 
+                                                   update="@form" />
+                                </div>
+
+                                <p:commandLink styleClass="menuHover" 
+                                               value="Estoque" 
+                                               action="#{itemBean.habilitaAlterarEstoque(item)}" 
+                                               update="@form" />
+                            </p:column>
+
+                        </p:dataTable>
+
+                        <br/>
+                        <h:commandLink styleClass="textHover" rendered="#{itemBean.listarItem}">
+                            <p:graphicImage value="/FIGURAS/excel.png" />  
+                            Exportar para EXCEL
+                            <p:dataExporter type="xls" target="dataTable" pageOnly="false" fileName="Itens" />
+                        </h:commandLink>
+                        <br/>
+                        <h:commandLink styleClass="textHover" rendered="#{itemBean.listarItem}">
+                            <p:graphicImage value="/FIGURAS/pdf.png" />
+                            Exportar para PDF
+                            <p:dataExporter type="pdf" target="dataTable" pageOnly="false" fileName="Itens" />
+                        </h:commandLink>
+                    </h:form>
+
+                </h:panelGrid>
+
+                <h:panelGrid rendered="#{!itemBean.privilegiosUsuario}">
+
+                    <h1 style="color: red">&nbsp;&nbsp;VOCÊ NÃO ESTÁ LOGADO OU NÃO TEM ACESSO AO CONTEÚDO!</h1>
+
+                    <h:form>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <p:commandLink 
+                            styleClass="welcomeLink" 
+                            action="index.xhtml?faces-redirect=true">
+                            REALIZE LOGIN
+                        </p:commandLink>,&nbsp;
+                        <span class="welcomeTxt">
+                            ou contate o administrador do sistema.
+                        </span>
+                    </h:form> 
+
+                </h:panelGrid>
+
+            </ui:define>         
+        </ui:composition>
+    </body>
+</html>

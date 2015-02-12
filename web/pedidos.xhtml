@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./TMP.xhtml">
+
+            <ui:define name="corpo">
+                <h:form id="formLista" styleClass="FormListaItens"> 
+
+                    <!--p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" /-->
+
+                    <p:commandButton onclick="PF('statusDialog').show()"/>
+
+
+                    <p:dialog widgetVar="statusDialog" modal="false" draggable="false" closable="true" resizable="false" showHeader="true">
+                        <h:outputText value="Procurar : " />  
+                        <p:inputText id="globalFilter" onkeyup="itemTable.filter()" style="width:150px" />
+                        <p:commandButton onclick="PF('statusDialog')."/>
+                    </p:dialog>
+
+                    <p:growl id="growl2" showDetail="true" transient="true" sticky="false" life="3000"/>
+
+                    <p:dataTable id="dataTable" 
+                                 draggableColumns="true"
+                                 style="max-width: 100%; min-width: 100%"
+                                 var="item" 
+                                 value="#{itemBean.lista}" 
+                                 widgetVar="itemTable" 
+                                 emptyMessage="Sem resultados para a busca..." 
+                                 filteredValue="#{itemBean.filtroItems}"
+                                 paginator="true"
+                                 rows="15" >
+
+                        <f:facet name="header">  
+                            <p:outputPanel>  
+                                <h:outputText value="Procurar : " />  
+                                <p:inputText id="globalFilter" onkeyup="itemTable.filter()" style="width:150px" />  
+                            </p:outputPanel>  
+                        </f:facet> 
+
+                        <p:column style="width:20px">
+                            <p:commandLink value="Add" style="color: blue; "></p:commandLink>
+                        </p:column>
+
+                        <!--p:column styleClass="colAdj"
+                                  style="max-width: 4%; min-width: 4%; overflow:hidden" 
+                                  id="idCol" 
+                                  headerText="ID"
+                                  >  
+                            <h:outputText value="#{item.id}">
+                                <f:convertNumber pattern="#####0000"/> 
+                            </h:outputText> 
+                        </p:column-->
+
+                        <p:column 
+                            styleClass="colAdj"
+                            id="desc"               
+                            filterBy="descricao"   
+                            headerText="DESCRIÇÃO"
+                            filterMatchMode="contains">     
+                            <h:outputText value="#{item.descricao}">
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column 
+                            styleClass="colAdj"
+                            id="marca"               
+                            filterBy="marca"   
+                            headerText="MARCA"
+                            filterMatchMode="contains">     
+                            <h:outputText value="#{item.marca}">
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column 
+                            styleClass="colAdj"
+                            id="modelo"               
+                            filterBy="modelo"   
+                            headerText="MODELO"
+                            filterMatchMode="contains">     
+                            <h:outputText value="#{item.modelo}">
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column 
+                            styleClass="colAdj"
+                            id="origem" 
+                            filterBy="origem"   
+                            headerText="ORIGEM"
+                            filterMatchMode="contains">  
+                            <h:outputText value="#{item.origem}">
+                            </h:outputText>  
+                        </p:column>
+
+                        <p:column 
+                            style="max-width: 8%; min-width: 8%; overflow:hidden"
+                            styleClass="colAdj"
+                            id="quantidade"                    
+                            headerText="QUANTIDADE">  
+                            <h:outputText value="#{item.quantidade}">
+                                <f:convertNumber pattern="#,##0.00"/>
+                            </h:outputText>  
+                        </p:column>
+
+                        <p:column 
+                            style="max-width: 8%; min-width: 8%; overflow:hidden"
+                            styleClass="colAdj"
+                            id="custo"    
+                            headerText="CUSTO">  
+                            <h:outputText value="#{item.custoDoProduto}">
+                                <f:convertNumber pattern="R$ #,##0.00"/>
+                            </h:outputText>  
+                        </p:column>
+
+                        <p:column
+                            style="max-width: 8%; min-width: 8%; overflow:hidden"
+                            styleClass="colAdj"
+                            id="valv" 
+                            headerText="VENDA">  
+                            <h:outputText value="#{item.valorDaVenda}">
+                                <f:convertNumber pattern="R$ #,##0.00"/>
+                            </h:outputText>  
+                        </p:column>
+
+                        <p:column
+                            style="max-width: 8%; min-width: 8%; overflow:hidden"
+                            styleClass="colAdj"
+                            id="lucrov"   
+                            headerText="LUCRO">  
+                            <h:outputText value="#{item.lucroDaVenda}" >
+                                <f:convertNumber pattern="R$ #,##0.00"/>    
+                            </h:outputText>  
+                        </p:column>
+
+                        <p:column 
+                            id="opcoes"  
+                            exportable="false"   
+                            headerText="OPÇÕES"
+                            styleClass="ColOpcoes"
+                            >
+
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>
+
+                            <p:commandLink value="Remover" action="#{itemBean.removeItem(item)}" update="dataTable" rendered="#{itemBean.privilegiosUsuario}">
+                                <p:confirm header="Confirmation" message="Deseja REMOVER o Item ?" icon="ui-icon-trash" />
+                            </p:commandLink>
+
+                            <p:outputLabel value=" | " rendered="#{itemBean.privilegiosUsuario}" />
+
+                            <p:commandLink value="Editar" action="#{itemBean.editaItem(item)}" update="dataTable" rendered="#{itemBean.privilegiosUsuario}">
+                                <p:confirm header="Confirmation" message="Deseja EDITAR o Item ?" icon="ui-icon-pencil" />
+                            </p:commandLink>
+
+
+                        </p:column>
+                    </p:dataTable>
+
+                    <h:commandLink value="Salvar em Excel">                     
+                        <p:dataExporter type="xls" target="dataTable" fileName="ORCAMENTO" pageOnly="true"/>  
+                    </h:commandLink>  
+
+                </h:form>               
+            </ui:define>         
+        </ui:composition>
+
+    </body>
+</html>

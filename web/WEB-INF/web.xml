@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Production</param-value>
+        <!--<param-value>Development</param-value>-->
+    </context-param>
+    
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.itc</url-pattern>
+    </servlet-mapping>
+    
+    <session-config>
+        <session-timeout>
+            60
+        </session-timeout>
+    </session-config>
+    
+    <welcome-file-list>
+        <welcome-file>index.itc</welcome-file>
+    </welcome-file-list>
+    
+    <!-- prime faces -->
+    <context-param>
+        <param-name>primefaces.UPLOADER</param-name>
+        <param-value>commons</param-value>
+    </context-param>
+    
+    <!--<servlet>
+        <servlet-name>Resource Servlet</servlet-name>
+        <servlet-class>org.primefaces.resource.ResourceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Resource Servlet</servlet-name>
+        <url-pattern>/primefaces_resource/*</url-pattern>
+    </servlet-mapping>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>#{configuracoesForm.meuTema}</param-value>
+    </context-param>-->
+    
+    <context-param>  
+        <param-name>primefaces.THEME</param-name>  
+        <param-value>blitzer</param-value>  
+    </context-param>
+    
+    <filter>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>PrimeFaces FileUpload Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping> 
+    
+    <!--Bloqueio .XHTML-->
+    <security-constraint>
+        <display-name>Bloqueia o browser de acessar arquivos xhtml</display-name>
+        <web-resource-collection>
+            <web-resource-name>xhtml files</web-resource-name>
+            <url-pattern>*.xhtml</url-pattern>
+        </web-resource-collection>
+        <auth-constraint/>
+    </security-constraint>
+    
+</web-app>
