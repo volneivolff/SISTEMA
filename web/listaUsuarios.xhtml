@@ -23,20 +23,44 @@
                             <h:panelGrid id="usrModGrid" columns="2" cellpadding="5">
 
                                 <h:outputText value="Nome:" />
-                                <p:inputText value="#{itemBean.usr.nome}" required="false"/>
+                                <p:inputTextarea rows="1" cols="32" value="#{itemBean.usr.nome}" required="false"/>
 
-                                <h:outputText value="Usuário:" />
-                                <p:inputText value="#{itemBean.usr.usuario}" required="false"/>    
+                                <h:outputText  value="Usuário:" />
+                                <p:inputTextarea rows="1" cols="32" value="#{itemBean.usr.usuario}" required="false"/>    
 
                                 <h:outputText value="Email:" />
-                                <p:inputTextarea rows="1" value="#{itemBean.usr.email}" required="false"/>    
+                                <p:inputTextarea rows="1" cols="32" value="#{itemBean.usr.email}" required="false"/>    
 
                                 <h:outputText value="Telefone:" />
                                 <p:inputMask mask="(99) 9999-9999?9" value="#{itemBean.usr.telefone}" required="false" />    
 
                                 <h:outputText value="Administrador:" />
                                 <p:selectBooleanCheckbox value="#{itemBean.usr.administrador}" required="false" />    
+                                
+                                <h:outputText value="Adiciona Clientes:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.addCliente}" required="false" />    
 
+                                <h:outputText value="Adiciona Itens ao Estoque:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.addEstoque}" required="false" />    
+
+                                <h:outputText value="Altera Quatidades no Estoque:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.altEstoque}" required="false" />    
+
+                                <h:outputText value="Deleta Itens do Estoque:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.delEstoque}" required="false" />    
+
+                                <h:outputText value="Adiciona Usuários:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.addUsuario}" required="false" />    
+
+                                <h:outputText value="Altera Usuários:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.altUsuario}" required="false" />    
+
+                                <h:outputText value="Deleta Usuários:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.delUsuario}" required="false" />  
+
+                                <h:outputText value="Administra o Sistema:" />
+                                <p:selectBooleanCheckbox value="#{itemBean.usr.admSistema}" required="false" />    
+                                
                                 <h:outputText value="Senha:" />
                                 <p:password value="#{itemBean.usr.senha}" required="false" feedback="true"/> 
 
