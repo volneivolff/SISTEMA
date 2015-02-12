@@ -21,13 +21,13 @@
                             <h:panelGrid id="descGrid" columns="2" cellpadding="5">
 
                                 <h:outputText value="Nome:" />
-                                <p:inputText value="#{itemBean.usr.nome}" required="false"/>
+                                <p:inputTextarea rows="1" cols="32" value="#{itemBean.usr.nome}" required="false"/>
 
-                                <h:outputText value="Usuário:" />
-                                <p:inputText value="#{itemBean.usr.usuario}" required="false"/>    
+                                <h:outputText  value="Usuário:" />
+                                <p:inputTextarea rows="1" cols="32" value="#{itemBean.usr.usuario}" required="false"/>    
 
                                 <h:outputText value="Email:" />
-                                <p:inputTextarea rows="1" value="#{itemBean.usr.email}" required="false"/>    
+                                <p:inputTextarea rows="1" cols="32" value="#{itemBean.usr.email}" required="false"/>    
 
                                 <h:outputText value="Telefone:" />
                                 <p:inputMask mask="(99) 9999-9999?9" value="#{itemBean.usr.telefone}" required="false" />    
